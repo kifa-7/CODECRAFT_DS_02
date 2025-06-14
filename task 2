@@ -1,0 +1,48 @@
+titanic_data = [
+    {"Name": "Allen", "Sex": "male", "Age": 22, "Pclass": 3, "Survived": 0},
+    {"Name": "Braund", "Sex": "male", "Age": 35, "Pclass": 1, "Survived": 1},
+    {"Name": "Cumings", "Sex": "female", "Age": 38, "Pclass": 1, "Survived": 1},
+    {"Name": "Futrelle", "Sex": "female", "Age": None, "Pclass": 1, "Survived": 1},
+    {"Name": "Moran", "Sex": "male", "Age": None, "Pclass": 3, "Survived": 0},
+    {"Name": "Heikkinen", "Sex": "female", "Age": 26, "Pclass": 2, "Survived": 1},
+    {"Name": "Williams", "Sex": "male", "Age": 28, "Pclass": 3, "Survived": 0},
+    {"Name": "Palsson", "Sex": "male", "Age": 2, "Pclass": 3, "Survived": 0}
+]
+ages = [p["Age"] for p in titanic_data if p["Age"] is not None]
+avg_age = sum(ages) / len(ages)
+
+for p in titanic_data:
+    if p["Age"] is None:
+        p["Age"] = round(avg_age)
+
+total = len(titanic_data)
+survived = sum(1 for p in titanic_data if p["Survived"] == 1)
+not_survived = total - survived
+
+print(f"Total Passengers: {total}")
+print(f"Survived: {survived}")
+print(f"Did Not Survive: {not_survived}")
+
+gender_stats = {"male": {"survived": 0, "total": 0}, "female": {"survived": 0, "total": 0}}
+
+for p in titanic_data:
+    gender = p["Sex"]
+    gender_stats[gender]["total"] += 1
+    if p["Survived"] == 1:
+        gender_stats[gender]["survived"] += 1
+
+for gender in gender_stats:
+    rate = gender_stats[gender]["survived"] / gender_stats[gender]["total"] * 100
+    print(f"{gender.capitalize()} Survival Rate: {rate:.2f}%")
+
+class_stats = {1: {"survived": 0, "total": 0}, 2: {"survived": 0, "total": 0}, 3: {"survived": 0, "total": 0}}
+
+for p in titanic_data:
+    cls = p["Pclass"]
+    class_stats[cls]["total"] += 1
+    if p["Survived"] == 1:
+        class_stats[cls]["survived"] += 1
+
+for cls in sorted(class_stats):
+    rate = class_stats[cls]["survived"] / class_stats[cls]["total"] * 100
+    print(f"Class {cls} Survival Rate: {rate:.2f}%")
